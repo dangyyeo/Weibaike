@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<courses>
+    <course>
+        <name>huaxue</name>
+        <courseurl>sssssss</courseurl>
+        <picurl>aaaaa</picurl>
+        <state>1</state>
+    </course>
+    <course>
+        <name>yingyu</name>
+        <courseurl>dddd</courseurl>
+        <picurl>cccc</picurl>
+        <state>1</state>
+    </course>
+</courses>
