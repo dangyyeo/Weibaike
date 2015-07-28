@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <courses>
-    <course>
+    <course id="1">
         <name>huaxue</name>
         <courseurl>sssssss</courseurl>
         <picurl>aaaaa</picurl>
         <state>1</state>
     </course>
-    <course>
+    <course id="2">
+        <id>2</id>
         <name>yingyu</name>
         <courseurl>dddd</courseurl>
         <picurl>cccc</picurl>

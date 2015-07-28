@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
 public class MActivity extends Activity {
@@ -32,56 +34,49 @@ public class MActivity extends Activity {
 
 		lists=new ArrayList<Course>();
 		
-//		inputStream = this.getResources().openRawResource(R.xml.course_xml);
-		
-//		Log.i("-----", inputStream.toString());
 		getCourseLists();
 		for(Course course:lists){
-			Log.i("--", course.getName().toString());
+			Log.i("--", course.getId() +"  "+course.getName().toString()+"  "+course.getPicurl()+"  "+course.getState()+"  "+course.getCourseurl());
 		}
-//		lists=PullCourseService.getCourses(inputStream);
 		CourseAdapter adapter = new CourseAdapter(lists, this);
 		
 		gridview.setAdapter(adapter);
 		
-		gridview.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View v) {
+		gridview.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
 				
 			}
 		});
 	}
-
+	
+	//获得配置文件信息
 	private void getCourseLists() {
 
-		Log.i("-----", "1qq");
-
-//		Thread thread = new Thread(new Runnable() {
-//			public void run() {
-				Log.i("-----", "1qqqq");
+		Thread thread = new Thread(new Runnable() {
+			public void run() {
+//				Log.i("-----", "1qqqq");
 				AssetManager asset=getAssets();
 				InputStream input = null;
 				try {
-					input = asset.open("course_xml.xml");
+					input = asset.open("course_xml.xml"); //获取配置文件
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 					List<Course> list = PullCourseService
-							.getCourses(input);
-					Log.i("-----", "1qqqqqq");
+							.getXmlCourses(input);
 					if (list != null) {
 						lists = list;
 					}
-					Log.i("-----", "1qqqqqq11");
-//			}
-//		});
-//		thread.start();
+			}
+		});
+		thread.start();
 
-		/*try {
+		try {
 			thread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}*/
+		}
 	}
 }

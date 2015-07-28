@@ -1,10 +1,13 @@
 package com.mmh2z.util;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlSerializer;
 
 import android.util.Log;
 import android.util.Xml;
@@ -13,24 +16,22 @@ import com.mmh2z.object.Course;
 
 public class PullCourseService {
 
-	public static List<Course> getCourses(InputStream instream) {
+	public static List<Course> getXmlCourses(InputStream instream) {
 		List<Course> courses = null;
 		Course course = null;
 		try {
 			// 获得pull解析器
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(instream, "utf-8");
-//			int depth=parser.getDepth();
-			
+			// int depth=parser.getDepth();
+
 			int eventType = parser.getEventType();
 			Log.i("-----", "1qqqqaa");
 			// 判断文件是否是文件的结尾，END_DOCUMENT文件结尾常量
 			while (eventType != XmlPullParser.END_DOCUMENT) {
 				switch (eventType) {
-				case XmlPullParser.START_DOCUMENT:// 文件开始，START_DOCUMENT文件开始开始常量
+				case XmlPullParser.START_DOCUMENT:// 文件开始，START_DOCUMENT文件开始常量
 					Log.i("-----", "开始文件");
-					/*String name1 = parser.getName();
-					Log.i("-----+++", name1);*/
 					courses = new ArrayList<Course>();
 					break;
 
@@ -42,22 +43,21 @@ public class PullCourseService {
 						course = new Course();
 						course.setId(Integer.valueOf(parser
 								.getAttributeValue(0)));
-						System.out.println("id=   "
-								+ parser.getAttributeValue(0));
-						Log.i("--aaaa", parser.getAttributeValue(0));
+					}
+					if (course != null) {
+						
+						if ("name".equals(name))
+							course.setName(parser.nextText());
+						if ("courseurl".equals(name))
+							course.setCourseurl(parser.nextText());
+						if ("picurl".equals(name))
+							course.setPicurl(parser.nextText());
+						if ("state".equals(name))
+							course.setState(Integer.valueOf(parser.nextText()));
 					}
 
-					if ("name".equals(name))
-						course.setName(parser.nextText());
-					if ("courseurl".equals(name))
-						course.setCourseurl(parser.nextText());
-					if ("picurl".equals(name))
-						course.setPicurl(parser.nextText());
-					if ("state".equals(parser.nextText()))
-						course.setState(Integer.valueOf(parser.nextText()));
-					
 					break;
-					
+
 				case XmlPullParser.END_TAG:
 					if ("course".equals(parser.getName()) && course != null) {
 						courses.add(course);
@@ -70,12 +70,60 @@ public class PullCourseService {
 				eventType = parser.next();
 				Log.i("-----", "1qqqqcc");
 			}
-			instream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+
+			try {
+				instream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return courses;
 
+	}
+	
+	public static void saveXmlCourses(List<Course> courses ,OutputStream outstream){
+		
+		XmlSerializer serializer=Xml.newSerializer();
+		try {
+			serializer.setOutput(outstream, "utf-8");
+			serializer.startDocument("utf-8", true);
+			
+			serializer.startTag(null, "courses");//标签
+			//加载数据
+			for(Course course : courses){
+				serializer.startTag(null, "course");
+				serializer.attribute(null, "id", course.getId()+"");
+				
+				serializer.startTag(null, "name");
+				serializer.text(course.getName());
+				serializer.endTag(null, "name");
+				
+				serializer.startTag(null, "courseurl");
+				serializer.text(course.getCourseurl());
+				serializer.endTag(null, "courseurl");
+				
+				serializer.startTag(null, "picurl");
+				serializer.text(course.getPicurl());
+				serializer.endTag(null, "picurl");
+				
+				serializer.startTag(null, "state");
+				serializer.text(course.getState()+"");
+				serializer.endTag(null, "state");
+				
+				serializer.endTag(null, "course");
+			}
+			
+			serializer.endTag(null, "courses");
+			serializer.endDocument();
+			outstream.flush();
+			outstream.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
