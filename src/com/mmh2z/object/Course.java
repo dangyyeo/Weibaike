@@ -9,7 +9,7 @@ public class Course implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private String courseurl;
+	private int cid;
 	private String picurl;
 	private String name;
 	private int state; // 是否发布 0未发布， 1 发布
@@ -18,11 +18,11 @@ public class Course implements Serializable{
 		super();
 	}
 
-	public Course(int id, String courseurl, String picurl, String name,
+	public Course(int id, int cid, String picurl, String name,
 			int state) {
 		super();
 		this.id = id;
-		this.courseurl = courseurl;
+		this.cid = cid;
 		this.picurl = picurl;
 		this.name = name;
 		this.state = state;
@@ -36,12 +36,14 @@ public class Course implements Serializable{
 		this.id = id;
 	}
 
-	public String getCourseurl() {
-		return courseurl;
+	
+
+	public int getCid() {
+		return cid;
 	}
 
-	public void setCourseurl(String courseurl) {
-		this.courseurl = courseurl;
+	public void setCid(int cid) {
+		this.cid = cid;
 	}
 
 	public String getPicurl() {

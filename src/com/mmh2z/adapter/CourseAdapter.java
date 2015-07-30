@@ -20,17 +20,17 @@ public class CourseAdapter extends BaseAdapter {
 
 	private Context context;
 	private List<Course> course;
+	private int selectposition = -1;
 
-	
 	public CourseAdapter() {
 		super();
-		course=new ArrayList<Course>();
+		course = new ArrayList<Course>();
 	}
 
 	public CourseAdapter(List<Course> course, Context context) {
 		super();
-		this.context=context;
-		this.course=course;
+		this.context = context;
+		this.course = course;
 	}
 
 	public int getCount() {
@@ -52,7 +52,8 @@ public class CourseAdapter extends BaseAdapter {
 
 		ViewHolder viewHolder;
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(R.layout.picture_item, null);
+			convertView = LayoutInflater.from(context).inflate(
+					R.layout.picture_item, null);
 			viewHolder = new ViewHolder();
 			viewHolder.title = (TextView) convertView.findViewById(R.id.title);
 			viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
@@ -60,12 +61,22 @@ public class CourseAdapter extends BaseAdapter {
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
-		
+
 		viewHolder.title.setText(course.get(position).getName());
 
-		String imageurl=course.get(position).getPicurl();
-		HttpUtils.setPicBitmap(viewHolder.image, imageurl);
-		
+		int id = course.get(position).getId();
+		//处理“+”
+		if (id == -1) {
+			viewHolder.image.setImageResource(R.drawable.plus1);
+		} else {
+			String imageurl = course.get(position).getPicurl();
+
+			HttpUtils.setPicBitmap(viewHolder.image, imageurl);
+		}
 		return convertView;
+	}
+
+	public void setSelectposition(int position) {
+		this.selectposition = position;
 	}
 }

@@ -11,7 +11,7 @@
         android:layout_width="100dp"
         android:layout_height="130dp"
         android:layout_gravity="center"
-        android:src="@drawable/ic_launcher"
+        android:src="@drawable/pic"
         android:padding="4dp"
         android:scaleType="fitXY" />
 

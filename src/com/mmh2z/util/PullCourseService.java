@@ -23,7 +23,7 @@ public class PullCourseService {
 			// 获得pull解析器
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(instream, "utf-8");
-			// int depth=parser.getDepth();
+			int depth=parser.getDepth();
 
 			int eventType = parser.getEventType();
 			Log.i("-----", "1qqqqaa");
@@ -48,8 +48,8 @@ public class PullCourseService {
 						
 						if ("name".equals(name))
 							course.setName(parser.nextText());
-						if ("courseurl".equals(name))
-							course.setCourseurl(parser.nextText());
+						if ("cid".equals(name))
+							course.setCid(Integer.valueOf(parser.nextText()));
 						if ("picurl".equals(name))
 							course.setPicurl(parser.nextText());
 						if ("state".equals(name))
@@ -102,9 +102,9 @@ public class PullCourseService {
 				serializer.text(course.getName());
 				serializer.endTag(null, "name");
 				
-				serializer.startTag(null, "courseurl");
-				serializer.text(course.getCourseurl());
-				serializer.endTag(null, "courseurl");
+				serializer.startTag(null, "cid");
+				serializer.text(course.getCid()+"");
+				serializer.endTag(null, "cid");
 				
 				serializer.startTag(null, "picurl");
 				serializer.text(course.getPicurl());
@@ -122,6 +122,7 @@ public class PullCourseService {
 			outstream.flush();
 			outstream.close();
 			
+			Log.i("xml-------", "已加载");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

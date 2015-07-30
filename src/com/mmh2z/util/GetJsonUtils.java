@@ -61,10 +61,10 @@ public class GetJsonUtils {
 				int id = json.getInt("id");
 				String name = json.getString("name");
 				String imageurl = json.getString("image");
-				String url = json.getString("url");
+				int  cid = json.getInt("cid");
 				int state = json.getInt("state");
 
-				listItems.add(new Course(id, url, imageurl, name, state));
+				listItems.add(new Course(id, cid, imageurl, name, state));
 			}
 
 			return listItems;
