@@ -23,22 +23,20 @@ public class PullCourseService {
 			// 获得pull解析器
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(instream, "utf-8");
-			int depth=parser.getDepth();
 
 			int eventType = parser.getEventType();
-			Log.i("-----", "1qqqqaa");
+//			Log.i("-----", "1qqqqaa");
 			// 判断文件是否是文件的结尾，END_DOCUMENT文件结尾常量
 			while (eventType != XmlPullParser.END_DOCUMENT) {
 				switch (eventType) {
 				case XmlPullParser.START_DOCUMENT:// 文件开始，START_DOCUMENT文件开始常量
-					Log.i("-----", "开始文件");
+//					Log.i("-----", "开始文件");
 					courses = new ArrayList<Course>();
 					break;
 
 				case XmlPullParser.START_TAG:// 元素标签开始，START_TAG标签开始常量
-					Log.i("-----", "开始标签");
+//					Log.i("-----", "开始标签");
 					String name = parser.getName();
-					Log.i("-----+++", name);
 					if ("course".equals(name)) {
 						course = new Course();
 						course.setId(Integer.valueOf(parser
@@ -66,9 +64,9 @@ public class PullCourseService {
 					break;
 				}
 				// 获取当前元素标签的类型
-				Log.i("-----", "1qqqqbb");
+//				Log.i("-----", "1qqqqbb");
 				eventType = parser.next();
-				Log.i("-----", "1qqqqcc");
+//				Log.i("-----", "1qqqqcc");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -122,7 +120,7 @@ public class PullCourseService {
 			outstream.flush();
 			outstream.close();
 			
-			Log.i("xml-------", "已加载");
+//			Log.i("xml-------", "已加载");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

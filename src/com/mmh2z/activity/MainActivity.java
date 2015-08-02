@@ -7,10 +7,13 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 import com.mmh2z.adapter.CourseAdapter;
 import com.mmh2z.object.Course;
 import com.mmh2z.util.GetJsonUtils;
+import com.mmh2z.util.HttpUtils;
 import com.mmh2z.util.PullCourseService;
 
 public class MainActivity extends Activity {
@@ -30,6 +34,8 @@ public class MainActivity extends Activity {
 
 	private String devbaseURL = "http://192.168.1.106/hdwiki/index.php";
 	private List<Course> courselist;
+	private AlertDialog dialog = null;
+	Boolean flag = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +49,6 @@ public class MainActivity extends Activity {
 		// 获取已发布的Json数据，并处理之，存到courseList中
 		getCourseList();
 
-		/*if(courselist==null)
-			Toast.makeText(this, "已加载所有发布微课程。。", Toast.LENGTH_SHORT).show();*/
-		
 		final CourseAdapter adapter = new CourseAdapter(courselist, this);
 		gridview.setAdapter(adapter);
 
@@ -55,9 +58,8 @@ public class MainActivity extends Activity {
 					final int position, long id) {
 
 				final Course itemcourse = courselist.get(position);
-				// saveCourseInfo(itemcourse);// 加载该课程
 
-				new AlertDialog.Builder(MainActivity.this)
+				dialog = new AlertDialog.Builder(MainActivity.this)
 						.setTitle("已发布微课程")
 						.setMessage("是否下载？")
 						.setPositiveButton("下载",
@@ -71,9 +73,13 @@ public class MainActivity extends Activity {
 										courselist.remove(position);// 从已发布课程中移除
 
 										adapter.notifyDataSetChanged();//
-										
-										Toast.makeText(getApplicationContext(), "该课程已下载。", 0).show();
 
+										Toast.makeText(getApplicationContext(),
+												"该课程已下载。", 0).show();
+
+										flag = true;
+										// inforCall.onRefreshInfor();//刷新配置信息
+										Log.i("---------shua", "成功----");
 									}
 								}).setNegativeButton("取消", null).show();
 
@@ -138,15 +144,15 @@ public class MainActivity extends Activity {
 			public void run() {
 				try {
 
-					FileInputStream input = MainActivity.this
-							.openFileInput("course_xml");
+					FileInputStream input = HttpUtils.getFileInputStr(MainActivity.this);
+					
 					List<Course> list2 = PullCourseService.getXmlCourses(input);// 获取配置文件信息
 					for (Course co : list2)
 						Log.i("peizhi____---", co.getName());
-					list2.add(course);// 添加课程
 
-					FileOutputStream outstream = MainActivity.this
-							.openFileOutput("course_xml", Context.MODE_PRIVATE);
+					list2.add(0, course);// 添加课程
+
+					FileOutputStream outstream =HttpUtils.getFileOutputStr(MainActivity.this);
 
 					PullCourseService.saveXmlCourses(list2, outstream);
 
@@ -167,16 +173,30 @@ public class MainActivity extends Activity {
 
 	// 获取配置文件信息
 	public List<Course> getPreferinfo() {
-		FileInputStream input = null;
-		try {
-			input = MainActivity.this.openFileInput("course_xml");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		FileInputStream input = HttpUtils.getFileInputStr(MainActivity.this);
+		
 		List<Course> list = PullCourseService.getXmlCourses(input);// 获取配置文件信息
 
 		return list;
 
+	}
+
+	// 后退事件
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		if (keyCode == KeyEvent.KEYCODE_BACK
+				&& event.getAction() == KeyEvent.ACTION_DOWN) {
+
+			if (!flag) {
+				if (dialog!=null&&dialog.isShowing())
+					dialog.cancel();
+			}
+			startActivity(new Intent(MainActivity.this, MActivity.class));
+			MainActivity.this.finish();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
