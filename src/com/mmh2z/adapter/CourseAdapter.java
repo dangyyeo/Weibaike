@@ -81,7 +81,7 @@ public class CourseAdapter extends BaseAdapter {
 		int cid = courses.get(position).getCid();
 		// 处理“+”
 		if (cid == -123) {
-			viewHolder.image.setImageResource(R.drawable.plus1);
+			viewHolder.image.setImageResource(R.drawable.plu);
 			viewHolder.delete.setVisibility(View.GONE);
 		} else {
 			viewHolder.delete.setVisibility(isShowDelete?View.VISIBLE:View.GONE);//设置删除按钮是否显示

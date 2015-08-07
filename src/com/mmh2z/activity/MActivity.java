@@ -63,7 +63,6 @@ public class MActivity extends Activity {
 
 				//
 				int cid = itemCOur.getCid();
-
 				if (cid == -123) {
 					// 添加课程
 					Intent intent = new Intent(MActivity.this,
@@ -75,9 +74,11 @@ public class MActivity extends Activity {
 					Intent intent = new Intent(MActivity.this,
 							ShowActivity.class);
 
+					String name=itemCOur.getName();
 					// 用Bundle携带数据
 					Bundle bundle = new Bundle();
 					bundle.putInt("cid", cid);
+					bundle.putString("title", name);
 					intent.putExtras(bundle);
 
 					startActivity(intent);

@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -41,6 +42,9 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		ActionBar bar = getActionBar();
+		bar.setDisplayHomeAsUpEnabled(true);
 
 		gridview = (GridView) findViewById(R.id.gridView);
 
@@ -144,15 +148,17 @@ public class MainActivity extends Activity {
 			public void run() {
 				try {
 
-					FileInputStream input = HttpUtils.getFileInputStr(MainActivity.this);
-					
+					FileInputStream input = HttpUtils
+							.getFileInputStr(MainActivity.this);
+
 					List<Course> list2 = PullCourseService.getXmlCourses(input);// 获取配置文件信息
 					for (Course co : list2)
 						Log.i("peizhi____---", co.getName());
 
 					list2.add(0, course);// 添加课程
 
-					FileOutputStream outstream =HttpUtils.getFileOutputStr(MainActivity.this);
+					FileOutputStream outstream = HttpUtils
+							.getFileOutputStr(MainActivity.this);
 
 					PullCourseService.saveXmlCourses(list2, outstream);
 
@@ -173,9 +179,9 @@ public class MainActivity extends Activity {
 
 	// 获取配置文件信息
 	public List<Course> getPreferinfo() {
-		
+
 		FileInputStream input = HttpUtils.getFileInputStr(MainActivity.this);
-		
+
 		List<Course> list = PullCourseService.getXmlCourses(input);// 获取配置文件信息
 
 		return list;
@@ -189,7 +195,7 @@ public class MainActivity extends Activity {
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
 
 			if (!flag) {
-				if (dialog!=null&&dialog.isShowing())
+				if (dialog != null && dialog.isShowing())
 					dialog.cancel();
 			}
 			startActivity(new Intent(MainActivity.this, MActivity.class));
@@ -208,9 +214,15 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		switch (id) {
+		case R.id.action_settings:
 			return true;
+		case android.R.id.home:
+			startActivity(new Intent(MainActivity.this, MActivity.class));
+			MainActivity.this.finish();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 }

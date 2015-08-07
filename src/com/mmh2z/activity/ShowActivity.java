@@ -1,13 +1,20 @@
 package com.mmh2z.activity;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnKeyListener;
+import android.view.ViewConfiguration;
+import android.view.Window;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -25,11 +32,17 @@ public class ShowActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_web);
 
+		ActionBar bar = getActionBar();
+		bar.setDisplayHomeAsUpEnabled(true);
+
 		webview = (WebView) findViewById(R.id.web_view);
 
 		// 新页面接收数据
 		Bundle bundle = this.getIntent().getExtras();
 		cid = bundle.getInt("cid");
+		String title = bundle.getString("title");
+
+		bar.setTitle(title);
 
 		WebSettings ws = webview.getSettings();
 		ws.setJavaScriptEnabled(true);
@@ -48,11 +61,20 @@ public class ShowActivity extends Activity {
 				return true;
 			}
 
+			// 缓冲提示
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				dialog.dismiss();
 			}
 
+			// 加载错误时，显示界面
+			@Override
+			public void onReceivedError(WebView view, int errorCode,
+					String description, String failingUrl) {
+				// ??
+				view.loadUrl("");
+				super.onReceivedError(view, errorCode, description, failingUrl);
+			}
 		});
 
 		webview.setOnKeyListener(new OnKeyListener() {
@@ -67,6 +89,8 @@ public class ShowActivity extends Activity {
 		});
 
 		loadUrl(devbaseURL + "?category-view-" + cid);
+
+		setOverflowShowingAlways();
 	}
 
 	// 后退事件
@@ -87,19 +111,55 @@ public class ShowActivity extends Activity {
 			webview.reload();
 		}
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.show_menu, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		switch (id) {
+		case R.id.refresh:
+			webview.reload();
 			return true;
+		case android.R.id.home:
+			ShowActivity.this.finish();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
+	}
+
+	//显示菜单图标
+	/*@Override
+	public boolean onMenuOpened(int featureId, Menu menu) {
+
+		if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
+			if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+				try {
+					Method m = menu.getClass().getDeclaredMethod(
+							"setOptionalIconsVisible", Boolean.TYPE);
+					m.setAccessible(true);
+					m.invoke(menu, true);
+				} catch (Exception e) {
+				}
+			}
+		}
+		return super.onMenuOpened(featureId, menu);
+	}*/
+
+	private void setOverflowShowingAlways() {
+		try {
+			ViewConfiguration config = ViewConfiguration.get(this);
+			Field menuKeyField = ViewConfiguration.class
+					.getDeclaredField("sHasPermanentMenuKey");
+			menuKeyField.setAccessible(true);
+			menuKeyField.setBoolean(config, false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -9,9 +9,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.mmh2z.activity.MActivity;
-import com.mmh2z.activity.MainActivity;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +18,7 @@ public class HttpUtils {
 
 	private static String devbaseURL = "http://192.168.1.106/hdwiki/";
 
+	//设置图片
 	public static void setPicBitmap(final ImageView ivPic, final String pic_url) {
 		final String url = devbaseURL + pic_url;
 		Thread thread = new Thread(new Runnable() {
@@ -67,7 +65,7 @@ public class HttpUtils {
 		return input;
 	}
 
-	// 得到文件流FileInputStream
+	// 得到文件流FileOuputStream
 	public static FileOutputStream getFileOutputStr(Context context) {
 		FileOutputStream outstream = null;
 		try {
