@@ -8,8 +8,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -44,11 +42,6 @@ public class MActivity extends Activity {
 		// 增加"+"选项
 		addPlusOption();
 
-		/*
-		 * for (Course course : lists) { Log.i("--", course.getId() + "  " +
-		 * course.getName().toString() + "  " + course.getPicurl() + "  " +
-		 * course.getState() + "  " + course.getCid()); }
-		 */
 		adapter = new CourseAdapter(lists, this);
 
 		gridview.setAdapter(adapter);
@@ -111,7 +104,7 @@ public class MActivity extends Activity {
 		course.setId(-1);
 		course.setCid(-123);// 定值
 		course.setPicurl("picurl");
-		course.setName("");
+		course.setName("添加");
 		course.setState(1);
 
 		Boolean flag = true;
@@ -132,14 +125,6 @@ public class MActivity extends Activity {
 		Thread thread = new Thread(new Runnable() {
 			public void run() {
 
-				/*
-				 * File file = MActivity.this.getFileStreamPath("course_xml");
-				 * if (!file.exists()) file.createNewFile();
-				 * 
-				 * FileInputStream input = MActivity.this
-				 * .openFileInput("course_xml");
-				 */
-
 				FileInputStream input = HttpUtils
 						.getFileInputStr(MActivity.this); // 获取配置文件
 
@@ -154,21 +139,6 @@ public class MActivity extends Activity {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	private long exitTime = 0;

@@ -8,11 +8,12 @@
         android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnWidth="90dp"
+        android:columnWidth="100dp"
         android:gravity="center"
         android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"
         android:padding="15dp"
+        android:scrollbars="none"
         android:stretchMode="columnWidth"
         android:verticalSpacing="15dp" >
     </GridView>

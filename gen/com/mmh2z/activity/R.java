@@ -8,6 +8,9 @@
 package com.mmh2z.activity;
 
 public final class R {
+    public static final class array {
+        public static final int list_item=0x7f040000;
+    }
     public static final class attr {
     }
     public static final class dimen {
@@ -18,8 +21,8 @@ public final class R {
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margin=0x7f040000;
-        public static final int activity_vertical_margin=0x7f040001;
+        public static final int activity_horizontal_margin=0x7f050000;
+        public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
         public static final int bg3=0x7f020000;
@@ -33,39 +36,42 @@ public final class R {
         public static final int sta=0x7f020008;
     }
     public static final class id {
-        public static final int action_settings=0x7f08000a;
-        public static final int checkBox1=0x7f080002;
-        public static final int delete=0x7f080008;
-        public static final int gridView=0x7f080000;
-        public static final int gridView1=0x7f080001;
-        public static final int image=0x7f080006;
-        public static final int name=0x7f080007;
-        public static final int refresh=0x7f08000b;
-        public static final int root=0x7f080004;
-        public static final int starred_item_layout=0x7f080005;
-        public static final int textView1=0x7f080003;
-        public static final int web_view=0x7f080009;
+        public static final int Top_name=0x7f09000b;
+        public static final int action_settings=0x7f09000c;
+        public static final int delete=0x7f090008;
+        public static final int drawer_layout=0x7f090002;
+        public static final int gridView=0x7f090000;
+        public static final int gridView1=0x7f090001;
+        public static final int image=0x7f090006;
+        public static final int left_layout=0x7f090003;
+        public static final int lv_list=0x7f090004;
+        public static final int name=0x7f090007;
+        public static final int refresh=0x7f09000d;
+        public static final int root=0x7f09000a;
+        public static final int starred_item_layout=0x7f090005;
+        public static final int web_view=0x7f090009;
     }
     public static final class layout {
-        public static final int activity_main=0x7f030000;
+        public static final int grid_view=0x7f030000;
         public static final int init_xml=0x7f030001;
         public static final int launch_xml=0x7f030002;
-        public static final int list_item=0x7f030003;
+        public static final int main_layout=0x7f030003;
         public static final int picture_item=0x7f030004;
         public static final int show_web=0x7f030005;
+        public static final int top_item=0x7f030006;
     }
     public static final class menu {
-        public static final int main=0x7f070000;
-        public static final int show_menu=0x7f070001;
+        public static final int main=0x7f080000;
+        public static final int show_menu=0x7f080001;
     }
     public static final class string {
-        public static final int M_lable=0x7f050006;
-        public static final int Main_lable=0x7f050005;
-        public static final int action_settings=0x7f050002;
-        public static final int app_name=0x7f050000;
-        public static final int hello_world=0x7f050001;
-        public static final int start=0x7f050004;
-        public static final int start_word=0x7f050003;
+        public static final int M_lable=0x7f060006;
+        public static final int Main_lable=0x7f060005;
+        public static final int action_settings=0x7f060002;
+        public static final int app_name=0x7f060000;
+        public static final int hello_world=0x7f060001;
+        public static final int start=0x7f060004;
+        public static final int start_word=0x7f060003;
     }
     public static final class style {
         /**  <item name="android:actionBarStyle">@style/my_actionbar_style</item> 
@@ -81,9 +87,9 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f070000;
         /**  Application theme. 
          */
-        public static final int AppTheme=0x7f060001;
+        public static final int AppTheme=0x7f070001;
     }
 }

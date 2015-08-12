@@ -11,13 +11,13 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.mmh2z.object.Course;
+import com.mmh2z.object.TopCourse;
 
 import android.util.Log;
 
-public class GetJsonUtils {
+public class GetTop_JsonUtils {
 
-	public static List<Course> getJsonData(String url, String method) {
+	public static List<TopCourse> getTop_JsonData(String url, String method) {
 		HttpURLConnection conn;
 		InputStream is;
 		try {
@@ -36,7 +36,7 @@ public class GetJsonUtils {
 			if (result.toString().isEmpty()) {
 				return null;
 			} else {
-				List<Course> list = JsonParse(result.toString());
+				List<TopCourse> list = Top_JsonParse(result.toString());
 				return list;
 			}
 		} catch (Exception e) {
@@ -45,26 +45,26 @@ public class GetJsonUtils {
 		return null;
 	}
 
-	private static List<Course> JsonParse(String jsonData) {
-		List<Course> listItems = new ArrayList<Course>();
+	private static List<TopCourse> Top_JsonParse(String jsonData) {
+		List<TopCourse> listItems = new ArrayList<TopCourse>();
 
 		Log.i("JsonDataHandler",jsonData);
 		
 		try {
 			// 处理数据
-			JSONArray object = new JSONArray(jsonData);
+			JSONObject object = new JSONObject(jsonData);
+			// System.out.println(object.length());
 
-			for (int i = 0; i < object.length(); i++) {
-				JSONObject json = object.getJSONObject(i);
+			JSONArray subcateArray = object.getJSONArray("cate");
+			
+			for (int i = 0; i < subcateArray.length(); i++) {
+				JSONObject json = subcateArray.getJSONObject(i);
 
-				int id = json.getInt("id");
-				String name = json.getString("name");
-				String imageurl = json.getString("image");
+				int cid = json.getInt("cid");
 				int pid=json.getInt("pid");
-				int  cid = json.getInt("cid");
-				int state = json.getInt("state");
+				String name = json.getString("name");
 
-				listItems.add(new Course(id, cid,pid, imageurl, name, state));
+				listItems.add(new TopCourse(cid,pid,name));
 			}
 
 			return listItems;

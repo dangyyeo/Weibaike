@@ -1,12 +1,10 @@
 package com.mmh2z.activity;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -14,11 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.view.ViewConfiguration;
-import android.view.Window;
 import android.webkit.WebSettings;
+import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.webkit.WebSettings.LayoutAlgorithm;
 
 public class ShowActivity extends Activity {
 
@@ -132,24 +129,6 @@ public class ShowActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
-	//显示菜单图标
-	/*@Override
-	public boolean onMenuOpened(int featureId, Menu menu) {
-
-		if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
-			if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
-				try {
-					Method m = menu.getClass().getDeclaredMethod(
-							"setOptionalIconsVisible", Boolean.TYPE);
-					m.setAccessible(true);
-					m.invoke(menu, true);
-				} catch (Exception e) {
-				}
-			}
-		}
-		return super.onMenuOpened(featureId, menu);
-	}*/
 
 	private void setOverflowShowingAlways() {
 		try {
