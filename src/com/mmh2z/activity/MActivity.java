@@ -31,9 +31,9 @@ public class MActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.init_xml);
+		setContentView(R.layout.grid_view);
 
-		gridview = (GridView) findViewById(R.id.gridView1);
+		gridview = (GridView) findViewById(R.id.gridView);
 
 		lists = new ArrayList<Course>();
 

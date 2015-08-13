@@ -32,33 +32,36 @@ public final class R {
         public static final int lunch=0x7f020004;
         public static final int pic=0x7f020005;
         public static final int plu=0x7f020006;
-        public static final int refresh=0x7f020007;
-        public static final int sta=0x7f020008;
+        public static final int recent_chat_showright_normal=0x7f020007;
+        public static final int recent_chat_showright_pressed=0x7f020008;
+        public static final int refresh=0x7f020009;
+        public static final int showright_selector=0x7f02000a;
+        public static final int sta=0x7f02000b;
+        public static final int tub=0x7f02000c;
     }
     public static final class id {
         public static final int Top_name=0x7f09000b;
         public static final int action_settings=0x7f09000c;
         public static final int delete=0x7f090008;
-        public static final int drawer_layout=0x7f090002;
+        public static final int drawer_layout=0x7f090001;
         public static final int gridView=0x7f090000;
-        public static final int gridView1=0x7f090001;
         public static final int image=0x7f090006;
-        public static final int left_layout=0x7f090003;
+        public static final int left_layout=0x7f090002;
         public static final int lv_list=0x7f090004;
         public static final int name=0x7f090007;
         public static final int refresh=0x7f09000d;
         public static final int root=0x7f09000a;
         public static final int starred_item_layout=0x7f090005;
+        public static final int tv_all=0x7f090003;
         public static final int web_view=0x7f090009;
     }
     public static final class layout {
         public static final int grid_view=0x7f030000;
-        public static final int init_xml=0x7f030001;
-        public static final int launch_xml=0x7f030002;
-        public static final int main_layout=0x7f030003;
-        public static final int picture_item=0x7f030004;
-        public static final int show_web=0x7f030005;
-        public static final int top_item=0x7f030006;
+        public static final int launch_xml=0x7f030001;
+        public static final int main_layout=0x7f030002;
+        public static final int picture_item=0x7f030003;
+        public static final int show_web=0x7f030004;
+        public static final int top_item=0x7f030005;
     }
     public static final class menu {
         public static final int main=0x7f080000;

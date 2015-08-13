@@ -17,10 +17,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mmh2z.adapter.CourseAdapter;
@@ -36,6 +38,7 @@ public class MainActivity extends Activity {
 
 	private GridView gridview;
 	private ListView mlistview;
+	private TextView tvall;
 
 	private String devbaseURL = "http://192.168.1.106/hdwiki/index.php";
 	private List<Course> courselist;
@@ -47,13 +50,16 @@ public class MainActivity extends Activity {
 
 	private DrawerLayout drawer;
 
+	private ActionBar bar;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
 
-		ActionBar bar = getActionBar();
+		bar = getActionBar();
 		bar.setDisplayHomeAsUpEnabled(true);
+		
+		tvall = (TextView) findViewById(R.id.tv_all);
 
 		gridview = (GridView) findViewById(R.id.gridView);
 
@@ -72,12 +78,11 @@ public class MainActivity extends Activity {
 		getCourseList();
 
 		adapter = new CourseAdapter(courselist, this);
-		
+
 		gridview.setAdapter(adapter);
-		
-		if(courselist==null)
-			Toast.makeText(getApplicationContext(),
-					"无发布课程。", 0).show();
+
+		if (courselist == null)
+			Toast.makeText(getApplicationContext(), "无发布课程。", 0).show();
 
 		gridview.setOnItemClickListener(new OnItemClickListener() {
 
@@ -111,29 +116,52 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		tvall.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				
+				// 清空courselist列表
+				List<Course> newlist = new ArrayList<Course>();
+				if (courselist != null)
+					for (Course list : courselist) {
+						newlist.add(list);
+					}
+				courselist.removeAll(newlist);
+				
+				// 获得courselist列表
+				getCourseList();
+				adapter.notifyDataSetChanged();
+				
+				drawer.closeDrawer(Gravity.LEFT);
+				bar.setTitle("已发布课程");
+			}
+		});
+
 		mlistview.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
-				//清空courselist列表
+				// 清空courselist列表
 				List<Course> newlist = new ArrayList<Course>();
 				if (courselist != null)
 					for (Course list : courselist) {
-							newlist.add(list);
+						newlist.add(list);
 					}
 				courselist.removeAll(newlist);
-				
-				
-				//获得courselist列表
+
+				// 获得courselist列表
 				getCourseList();
-				
-				//获得选中分类cid
+
+				// 获得选中分类cid
 				TopCourse topItem = toplist.get(position);
 				int cid = topItem.getCid();
+				String name=topItem.getName();
 				UpdateCourseLists(cid);
 
 				drawer.closeDrawer(Gravity.LEFT);
+				
+				bar.setTitle(name);
 			}
 		});
 	}
@@ -237,9 +265,10 @@ public class MainActivity extends Activity {
 							.getFileInputStr(MainActivity.this);
 
 					List<Course> list2 = PullCourseService.getXmlCourses(input);// 获取配置文件信息
-					/*for (Course co : list2)
-						Log.i("peizhi____---", co.getName());
-*/
+					/*
+					 * for (Course co : list2) Log.i("peizhi____---",
+					 * co.getName());
+					 */
 					list2.add(0, course);// 添加课程
 
 					FileOutputStream outstream = HttpUtils
@@ -301,6 +330,10 @@ public class MainActivity extends Activity {
 		int id = item.getItemId();
 		switch (id) {
 		case R.id.action_settings:
+			if (drawer.isDrawerOpen(Gravity.LEFT))
+				drawer.closeDrawer(Gravity.LEFT);
+			else
+				drawer.openDrawer(Gravity.LEFT);
 			return true;
 		case android.R.id.home:
 			startActivity(new Intent(MainActivity.this, MActivity.class));
