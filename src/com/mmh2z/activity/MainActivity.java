@@ -90,10 +90,10 @@ public class MainActivity extends Activity {
 					final int position, long id) {
 
 				final Course itemcourse = courselist.get(position);
-
+				String name=itemcourse.getName();
 				dialog = new AlertDialog.Builder(MainActivity.this)
-						.setTitle("已发布微课程")
-						.setMessage("是否下载？")
+						.setTitle(name)
+						.setMessage("是否下载该课程？")
 						.setPositiveButton("下载",
 								new DialogInterface.OnClickListener() {
 

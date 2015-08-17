@@ -2,6 +2,7 @@ package com.mmh2z.activity;
 
 import java.lang.reflect.Field;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -44,12 +45,13 @@ public class ShowActivity extends Activity {
 		WebSettings ws = webview.getSettings();
 		ws.setJavaScriptEnabled(true);
 		ws.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-		ws.setSupportZoom(true);
-		ws.setBuiltInZoomControls(true);
-		ws.setUseWideViewPort(true);
-		ws.setLoadWithOverviewMode(true);
+//		ws.setSupportZoom(true);
+//		ws.setBuiltInZoomControls(true);
+//		ws.setUseWideViewPort(true);
+//		ws.setLoadWithOverviewMode(true);
 
 		ws.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+		
 		webview.setWebViewClient(new WebViewClient() {
 
 			@Override
@@ -85,7 +87,7 @@ public class ShowActivity extends Activity {
 			}
 		});
 
-		loadUrl(devbaseURL + "?category-view-" + cid);
+		loadUrl(devbaseURL + "?app-category_view-" + cid);
 
 		setOverflowShowingAlways();
 	}
