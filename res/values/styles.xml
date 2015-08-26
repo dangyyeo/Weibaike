@@ -9,7 +9,22 @@
     <!--
     <style name="my_actionbar_style" parent="@android:style/Theme.Light">
         <item name="android:background">@drawable/bg3</item>
-    </style>
+    </style>
     -->
+    
+    <style name="Theme.MainLoad" parent="AppBaseTheme">
+        <item name="android:windowBackground">@drawable/bg3</item>
+        <!-- <item name="android:windowNoTitle">true</item> -->
+    </style>
+    
+    <style name="Theme.AppStartLoad" parent="AppBaseTheme">
+        <item name="android:windowBackground">@drawable/sta</item>
+        <!-- <item name="android:windowNoTitle">true</item> -->
+    </style>
+
+    <style name="Theme.AppStartLoadTranslucent" parent="AppBaseTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- <item name="android:windowNoTitle">true</item> -->
+    </style>
 
 </resources>

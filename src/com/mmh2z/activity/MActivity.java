@@ -6,6 +6,8 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import com.mmh2z.adapter.CourseAdapter;
 import com.mmh2z.object.Course;
 import com.mmh2z.util.HttpUtils;
+import com.mmh2z.util.NetState;
 import com.mmh2z.util.PullCourseService;
 
 public class MActivity extends Activity {
@@ -67,7 +70,7 @@ public class MActivity extends Activity {
 					Intent intent = new Intent(MActivity.this,
 							ShowActivity.class);
 
-					String name=itemCOur.getName();
+					String name = itemCOur.getName();
 					// 用Bundle携带数据
 					Bundle bundle = new Bundle();
 					bundle.putInt("cid", cid);
@@ -95,6 +98,18 @@ public class MActivity extends Activity {
 			}
 		});
 
+		//检测网络状态
+		CheckNetStatus();
+
+	}
+
+	private void CheckNetStatus() {
+		
+		NetState receiver = new NetState();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+		this.registerReceiver(receiver, filter);
+		receiver.onReceive(this, null);
 	}
 
 	// 增加"+"号 选项

@@ -29,14 +29,15 @@ public final class R {
         public static final int bg_xml=0x7f020001;
         public static final int delete1=0x7f020002;
         public static final int ic_launcher=0x7f020003;
-        public static final int pic=0x7f020004;
-        public static final int plu=0x7f020005;
-        public static final int recent_chat_showright_normal=0x7f020006;
-        public static final int recent_chat_showright_pressed=0x7f020007;
-        public static final int refresh=0x7f020008;
-        public static final int showright_selector=0x7f020009;
-        public static final int sta=0x7f02000a;
-        public static final int tub=0x7f02000b;
+        public static final int ic_popup=0x7f020004;
+        public static final int pic=0x7f020005;
+        public static final int plu=0x7f020006;
+        public static final int recent_chat_showright_normal=0x7f020007;
+        public static final int recent_chat_showright_pressed=0x7f020008;
+        public static final int refresh=0x7f020009;
+        public static final int showright_selector=0x7f02000a;
+        public static final int sta=0x7f02000b;
+        public static final int tub=0x7f02000c;
     }
     public static final class id {
         public static final int Top_name=0x7f09000b;
@@ -48,7 +49,7 @@ public final class R {
         public static final int left_layout=0x7f090002;
         public static final int lv_list=0x7f090004;
         public static final int name=0x7f090007;
-        public static final int refresh=0x7f09000d;
+        public static final int ref=0x7f09000d;
         public static final int root=0x7f09000a;
         public static final int starred_item_layout=0x7f090005;
         public static final int tv_all=0x7f090003;
@@ -93,5 +94,21 @@ public final class R {
         /**  Application theme. 
          */
         public static final int AppTheme=0x7f070001;
+        /**  <item name="android:windowNoTitle">true</item> 
+         */
+        public static final int Theme_AppStartLoad=0x7f070003;
+        /**  <item name="android:windowNoTitle">true</item> 
+         */
+        public static final int Theme_AppStartLoadTranslucent=0x7f070004;
+        /** 
+    <style name="my_actionbar_style" parent="@android:style/Theme.Light">
+        <item name="android:background">@drawable/bg3</item>
+    </style>
+
+
+    
+ <item name="android:windowNoTitle">true</item> 
+         */
+        public static final int Theme_MainLoad=0x7f070002;
     }
 }

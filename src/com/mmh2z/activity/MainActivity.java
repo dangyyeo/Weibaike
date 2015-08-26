@@ -40,7 +40,9 @@ public class MainActivity extends Activity {
 	private ListView mlistview;
 	private TextView tvall;
 
-	private String devbaseURL = "http://192.168.1.106/hdwiki/index.php";
+	private String devbaseURL="http://mhbb.mhedu.sh.cn:8080/hdwiki/index.php";
+//	private String devbaseURL = "http://192.168.1.106/hdwiki/index.php";
+//	private String devbaseURL = "http://10.106.3.106/hdwiki/index.php";
 	private List<Course> courselist;
 	private List<TopCourse> toplist;
 
@@ -93,8 +95,8 @@ public class MainActivity extends Activity {
 				String name=itemcourse.getName();
 				dialog = new AlertDialog.Builder(MainActivity.this)
 						.setTitle(name)
-						.setMessage("是否下载该课程？")
-						.setPositiveButton("下载",
+						.setMessage("是否添加该课程？")
+						.setPositiveButton("添加",
 								new DialogInterface.OnClickListener() {
 
 									public void onClick(DialogInterface dialog,
@@ -107,7 +109,7 @@ public class MainActivity extends Activity {
 										adapter.notifyDataSetChanged();//
 
 										Toast.makeText(getApplicationContext(),
-												"该课程已下载。", 0).show();
+												"该课程已添加。", 0).show();
 
 										flag = true;
 									}

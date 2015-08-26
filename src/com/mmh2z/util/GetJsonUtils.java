@@ -11,9 +11,9 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.mmh2z.object.Course;
-
 import android.util.Log;
+
+import com.mmh2z.object.Course;
 
 public class GetJsonUtils {
 
@@ -32,7 +32,7 @@ public class GetJsonUtils {
 			while ((line = reader.readLine()) != null) {
 				result.append(line);
 			}
-			Log.i("Test", result.toString());
+//			Log.i("Test", result.toString());
 			if (result.toString().isEmpty()) {
 				return null;
 			} else {

@@ -2,7 +2,6 @@ package com.mmh2z.activity;
 
 import java.lang.reflect.Field;
 
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -13,8 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.view.ViewConfiguration;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.LayoutAlgorithm;
+import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -22,7 +23,8 @@ public class ShowActivity extends Activity {
 
 	private WebView webview;
 	private ProgressDialog dialog = null;
-	private String devbaseURL = "http://192.168.1.106/HDWiki/index.php";
+	private String devbaseURL="http://mhbb.mhedu.sh.cn:8080/hdwiki/index.php";
+//	private String devbaseURL = "http://10.106.3.106/HDWiki/index.php";
 	private int cid;
 
 	@Override
@@ -45,13 +47,16 @@ public class ShowActivity extends Activity {
 		WebSettings ws = webview.getSettings();
 		ws.setJavaScriptEnabled(true);
 		ws.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-//		ws.setSupportZoom(true);
-//		ws.setBuiltInZoomControls(true);
-//		ws.setUseWideViewPort(true);
-//		ws.setLoadWithOverviewMode(true);
-
-		ws.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+		// ws.setSupportZoom(true);
+		// ws.setBuiltInZoomControls(true);
+		// ws.setUseWideViewPort(true);
+		// ws.setLoadWithOverviewMode(true);
+		ws.setPluginState(PluginState.ON);
+		ws.setAllowFileAccess(true);
+		ws.setLoadsImagesAutomatically(true);
 		
+		ws.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+
 		webview.setWebViewClient(new WebViewClient() {
 
 			@Override
@@ -75,6 +80,8 @@ public class ShowActivity extends Activity {
 				super.onReceivedError(view, errorCode, description, failingUrl);
 			}
 		});
+
+		webview.setWebChromeClient(new WebChromeClient());
 
 		webview.setOnKeyListener(new OnKeyListener() {
 
@@ -121,7 +128,7 @@ public class ShowActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		switch (id) {
-		case R.id.refresh:
+		case R.id.ref:
 			webview.reload();
 			return true;
 		case android.R.id.home:

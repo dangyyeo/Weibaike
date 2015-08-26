@@ -9,7 +9,6 @@ import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlSerializer;
 
-import android.util.Log;
 import android.util.Xml;
 
 import com.mmh2z.object.Course;

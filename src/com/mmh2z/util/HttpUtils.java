@@ -16,7 +16,8 @@ import android.widget.ImageView;
 
 public class HttpUtils {
 
-	private static String devbaseURL = "http://192.168.1.106/hdwiki/";
+	private static String devbaseURL="http://mhbb.mhedu.sh.cn:8080/hdwiki/";
+//	private static String devbaseURL = "http://10.106.3.106/hdwiki/";
 
 	//设置图片
 	public static void setPicBitmap(final ImageView ivPic, final String pic_url) {
