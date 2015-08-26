@@ -97,9 +97,6 @@ public final class R {
         /**  <item name="android:windowNoTitle">true</item> 
          */
         public static final int Theme_AppStartLoad=0x7f070003;
-        /**  <item name="android:windowNoTitle">true</item> 
-         */
-        public static final int Theme_AppStartLoadTranslucent=0x7f070004;
         /** 
     <style name="my_actionbar_style" parent="@android:style/Theme.Light">
         <item name="android:background">@drawable/bg3</item>
