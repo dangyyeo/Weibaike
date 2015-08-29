@@ -2,11 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.mh2z.activity.MainActivity" >
 
+    <!-- <item
+        android:id="@+id/id_refresh"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_popup"
+        android:title="刷新"/> -->
     <item
         android:id="@+id/action_settings"
+        android:icon="@drawable/showright_selector"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:title="分类"
-        android:icon="@drawable/showright_selector"/>
+        android:title="分类"/>
 
 </menu>

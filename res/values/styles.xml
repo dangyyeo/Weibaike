@@ -9,22 +9,23 @@
     <!--
     <style name="my_actionbar_style" parent="@android:style/Theme.Light">
         <item name="android:background">@drawable/bg3</item>
-    </style>
+    </style>
     -->
-    
+
     <style name="Theme.MainLoad" parent="AppBaseTheme">
         <item name="android:windowBackground">@drawable/bg3</item>
         <!-- <item name="android:windowNoTitle">true</item> -->
     </style>
-    
+
     <style name="Theme.AppStartLoad" parent="AppBaseTheme">
         <item name="android:windowBackground">@drawable/sta</item>
-        <!-- <item name="android:windowNoTitle">true</item> -->
+        <item name="android:windowNoTitle">true</item>
     </style>
 
-   <!--  <style name="Theme.AppStartLoadTranslucent" parent="AppBaseTheme">
+    <style name="Transparent" parent="AppBaseTheme">
+
+        <!-- 将Activity的Theme设置成透明 -->
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowNoTitle">true</item>
-    </style> -->
+    </style>
 
 </resources>

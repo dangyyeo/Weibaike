@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class CourseAdapter extends BaseAdapter {
@@ -66,9 +68,11 @@ public class CourseAdapter extends BaseAdapter {
 					R.layout.picture_item, null);
 			viewHolder = new ViewHolder();
 			viewHolder.name = (TextView) convertView.findViewById(R.id.name);
-			viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
+//			viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
 			viewHolder.delete = (ImageView) convertView
 					.findViewById(R.id.delete);
+			viewHolder.layout = (LinearLayout) convertView
+					.findViewById(R.id.id_layout_pic);
 			
 			convertView.setTag(viewHolder);
 		} else {
@@ -79,15 +83,18 @@ public class CourseAdapter extends BaseAdapter {
 		
 		int cid = courses.get(position).getCid();
 		// 处理“+”
+		
 		if (cid == -123) {
-			viewHolder.image.setImageResource(R.drawable.plu);
+//			viewHolder.image.setImageResource(R.drawable.plu);
 			viewHolder.delete.setVisibility(View.GONE);
+			viewHolder.layout.setBackgroundResource(R.drawable.plu);
 		} else {
 			viewHolder.delete.setVisibility(isShowDelete?View.VISIBLE:View.GONE);//设置删除按钮是否显示
 
-			String imageurl = courses.get(position).getPicurl();
-
-			HttpUtils.setPicBitmap(viewHolder.image, imageurl);
+			/*String imageurl = courses.get(position).getPicurl();
+//
+			HttpUtils.setPicBitmap(viewHolder.image, imageurl);*/
+//			viewHolder.image.setImageResource(R.drawable.pic);
 		}
 		
 		//设置删除图标监听器

@@ -19,7 +19,7 @@ public class HttpUtils {
 	private static String devbaseURL="http://mhbb.mhedu.sh.cn:8080/hdwiki/";
 //	private static String devbaseURL = "http://10.106.3.106/hdwiki/";
 
-	//设置图片
+	/*//设置图片
 	public static void setPicBitmap(final ImageView ivPic, final String pic_url) {
 		final String url = devbaseURL + pic_url;
 		Thread thread = new Thread(new Runnable() {
@@ -46,7 +46,7 @@ public class HttpUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	// 得到配置文件流FileInputStream
 	public static FileInputStream getFileInputStr(Context context) {

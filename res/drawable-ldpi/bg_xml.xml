@@ -11,5 +11,4 @@
         android:dashWidth="1dp"
         android:width="2dp"
         android:color="@android:color/black" />
-
 </shape>

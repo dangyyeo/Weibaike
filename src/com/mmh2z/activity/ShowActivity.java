@@ -6,6 +6,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,13 +20,14 @@ import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 public class ShowActivity extends Activity {
 
 	private WebView webview;
-	private ProgressDialog dialog = null;
-	private String devbaseURL="http://mhbb.mhedu.sh.cn:8080/hdwiki/index.php";
-//	private String devbaseURL = "http://10.106.3.106/HDWiki/index.php";
+	private ProgressDialog dialog;
+	private String devbaseURL = "http://mhbb.mhedu.sh.cn:8080/hdwiki/index.php";
+	// private String devbaseURL = "http://10.106.3.106/HDWiki/index.php";
 	private int cid;
 
 	@Override
@@ -47,14 +50,11 @@ public class ShowActivity extends Activity {
 		WebSettings ws = webview.getSettings();
 		ws.setJavaScriptEnabled(true);
 		ws.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-		// ws.setSupportZoom(true);
-		// ws.setBuiltInZoomControls(true);
-		// ws.setUseWideViewPort(true);
-		// ws.setLoadWithOverviewMode(true);
+
 		ws.setPluginState(PluginState.ON);
 		ws.setAllowFileAccess(true);
 		ws.setLoadsImagesAutomatically(true);
-		
+
 		ws.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
 
 		webview.setWebViewClient(new WebViewClient() {
@@ -65,23 +65,49 @@ public class ShowActivity extends Activity {
 				return true;
 			}
 
-			// 缓冲提示
-			@Override
-			public void onPageFinished(WebView view, String url) {
-				dialog.dismiss();
-			}
-
 			// 加载错误时，显示界面
 			@Override
 			public void onReceivedError(WebView view, int errorCode,
 					String description, String failingUrl) {
 				// ??
 				view.loadUrl("");
+				Toast toast = Toast.makeText(ShowActivity.this, "请连接网络.. —刷新。",
+						Toast.LENGTH_LONG);
+				// 可以控制toast显示的位置
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
 				super.onReceivedError(view, errorCode, description, failingUrl);
 			}
 		});
 
-		webview.setWebChromeClient(new WebChromeClient());
+		webview.setWebChromeClient(new WebChromeClient() {
+			@Override
+			public void onProgressChanged(WebView view, int newProgress) {
+				// newProgress 1~100整数
+				if (newProgress == 100) {
+					// 网页加载完毕，关闭
+					closeDialog();
+				} else {
+					// 网页正在加载，打开ProgressDialog
+					openDialog();
+				}
+			}
+
+			private void openDialog() {
+				if (dialog == null) {
+					dialog = new ProgressDialog(ShowActivity.this);
+					dialog = ProgressDialog.show(ShowActivity.this, null,
+							"页面加载中，请稍后..");
+				}
+			}
+
+			private void closeDialog() {
+				if (dialog != null && dialog.isShowing()) {
+					dialog.dismiss();
+					dialog = null;
+				}
+			}
+		});
 
 		webview.setOnKeyListener(new OnKeyListener() {
 
@@ -94,28 +120,9 @@ public class ShowActivity extends Activity {
 			}
 		});
 
-		loadUrl(devbaseURL + "?app-category_view-" + cid);
+		webview.loadUrl(devbaseURL + "?app-category_view-" + cid);
 
 		setOverflowShowingAlways();
-	}
-
-	// 后退事件
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-		if (keyCode == KeyEvent.KEYCODE_BACK
-				&& event.getAction() == KeyEvent.ACTION_DOWN) {
-			ShowActivity.this.finish();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	public void loadUrl(String url) {
-		if (webview != null) {
-			webview.loadUrl(url);
-			dialog = ProgressDialog.show(this, null, "页面加载中，请稍后..");
-			webview.reload();
-		}
 	}
 
 	@Override
@@ -130,6 +137,7 @@ public class ShowActivity extends Activity {
 		switch (id) {
 		case R.id.ref:
 			webview.reload();
+//			Log.i("----", "xhaaaa");
 			return true;
 		case android.R.id.home:
 			ShowActivity.this.finish();

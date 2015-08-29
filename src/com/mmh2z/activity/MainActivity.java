@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -40,27 +41,29 @@ public class MainActivity extends Activity {
 	private ListView mlistview;
 	private TextView tvall;
 
-	private String devbaseURL="http://mhbb.mhedu.sh.cn:8080/hdwiki/index.php";
-//	private String devbaseURL = "http://192.168.1.106/hdwiki/index.php";
-//	private String devbaseURL = "http://10.106.3.106/hdwiki/index.php";
+	private String devbaseURL = "http://mhbb.mhedu.sh.cn:8080/hdwiki/index.php";
+	// private String devbaseURL = "http://192.168.1.106/hdwiki/index.php";
+	// private String devbaseURL = "http://10.106.3.106/hdwiki/index.php";
 	private List<Course> courselist;
 	private List<TopCourse> toplist;
 
 	private CourseAdapter adapter;
+	private TopCourseAda topadapter;
 	private AlertDialog dialog = null;
 	Boolean flag = false;
 
 	private DrawerLayout drawer;
 
 	private ActionBar bar;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
-
+		Log.i("--Main---onCreate", "chenggong-----");
 		bar = getActionBar();
 		bar.setDisplayHomeAsUpEnabled(true);
-		
+
 		tvall = (TextView) findViewById(R.id.tv_all);
 
 		gridview = (GridView) findViewById(R.id.gridView);
@@ -71,7 +74,7 @@ public class MainActivity extends Activity {
 
 		toplist = new ArrayList<TopCourse>();
 		initTopList();
-		TopCourseAda topadapter = new TopCourseAda(this, toplist);
+		topadapter = new TopCourseAda(this, toplist);
 		mlistview.setAdapter(topadapter);
 
 		// 获取已发布的Json数据，并处理之，存到courseList中
@@ -92,7 +95,7 @@ public class MainActivity extends Activity {
 					final int position, long id) {
 
 				final Course itemcourse = courselist.get(position);
-				String name=itemcourse.getName();
+				String name = itemcourse.getName();
 				dialog = new AlertDialog.Builder(MainActivity.this)
 						.setTitle(name)
 						.setMessage("是否添加该课程？")
@@ -121,7 +124,7 @@ public class MainActivity extends Activity {
 		tvall.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				
+
 				// 清空courselist列表
 				List<Course> newlist = new ArrayList<Course>();
 				if (courselist != null)
@@ -129,11 +132,11 @@ public class MainActivity extends Activity {
 						newlist.add(list);
 					}
 				courselist.removeAll(newlist);
-				
+
 				// 获得courselist列表
 				getCourseList();
 				adapter.notifyDataSetChanged();
-				
+
 				drawer.closeDrawer(Gravity.LEFT);
 				bar.setTitle("已发布课程");
 			}
@@ -158,11 +161,11 @@ public class MainActivity extends Activity {
 				// 获得选中分类cid
 				TopCourse topItem = toplist.get(position);
 				int cid = topItem.getCid();
-				String name=topItem.getName();
+				String name = topItem.getName();
 				UpdateCourseLists(cid);
 
 				drawer.closeDrawer(Gravity.LEFT);
-				
+
 				bar.setTitle(name);
 			}
 		});
@@ -304,6 +307,42 @@ public class MainActivity extends Activity {
 
 	}
 
+	/*@Override
+	protected void onResume() {
+		Log.i("--Main---onresume", "chenggong-----");
+		super.onResume();
+	}
+
+	@Override
+	protected void onStart() {
+		Log.i("--Main---onStart", "chenggong-----");
+		super.onStart();
+	}
+
+	@Override
+	protected void onPause() {
+		Log.i("--Main---onPause", "chenggong-----");
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		Log.i("--Main---onStop", "chenggong-----");
+		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
+		Log.i("--Main---onDestroy", "chenggong-----");
+		super.onDestroy();
+	}
+
+	@Override
+	protected void onRestart() {
+		Log.i("--Main---onRestart", "chenggong-----");
+		super.onRestart();
+	}*/
+
 	// 后退事件
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
@@ -314,8 +353,12 @@ public class MainActivity extends Activity {
 				if (dialog != null && dialog.isShowing())
 					dialog.cancel();
 			}
-			startActivity(new Intent(MainActivity.this, MActivity.class));
+			Intent intent = new Intent(MainActivity.this, MActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			startActivity(intent);
 			MainActivity.this.finish();
+			overridePendingTransition(android.R.anim.fade_in,
+					android.R.anim.fade_out);
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -331,16 +374,23 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		switch (id) {
+
 		case R.id.action_settings:
 			if (drawer.isDrawerOpen(Gravity.LEFT))
 				drawer.closeDrawer(Gravity.LEFT);
 			else
 				drawer.openDrawer(Gravity.LEFT);
 			return true;
+
 		case android.R.id.home:
-			startActivity(new Intent(MainActivity.this, MActivity.class));
+			Intent intent = new Intent(MainActivity.this, MActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			startActivity(intent);
 			MainActivity.this.finish();
+			overridePendingTransition(android.R.anim.fade_in,
+					android.R.anim.fade_out);
 			return true;
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}

@@ -4,11 +4,15 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.R.bool;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,6 +40,7 @@ public class MActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.grid_view);
 
+		Log.i("onCreate", "chenggong-----");
 		gridview = (GridView) findViewById(R.id.gridView);
 
 		lists = new ArrayList<Course>();
@@ -60,11 +65,37 @@ public class MActivity extends Activity {
 				//
 				int cid = itemCOur.getCid();
 				if (cid == -123) {
-					// 添加课程
-					Intent intent = new Intent(MActivity.this,
-							MainActivity.class);
-					startActivity(intent);
-					MActivity.this.finish();
+
+					boolean flag = true;
+					ConnectivityManager manager = (ConnectivityManager) MActivity.this
+							.getSystemService(Context.CONNECTIVITY_SERVICE);
+					NetworkInfo gprs = manager
+							.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+					NetworkInfo wifi = manager
+							.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+					if (gprs != null) {
+						if (!gprs.isConnected() && !wifi.isConnected()) {
+							flag = false;
+						}
+					} else if (wifi != null) {
+						if (!wifi.isConnected()) {
+							flag = false;
+						}
+					}
+
+					if (!flag) {
+						Toast.makeText(MActivity.this, "请连接网络..",
+								Toast.LENGTH_LONG).show();
+					} else {
+						// 添加课程
+						Intent intent = new Intent(MActivity.this,
+								MainActivity.class);
+						intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+						startActivity(intent);
+						MActivity.this.finish();
+						overridePendingTransition(android.R.anim.fade_in,
+								android.R.anim.fade_out);
+					}
 				} else {
 					// 浏览信息
 					Intent intent = new Intent(MActivity.this,
@@ -98,13 +129,13 @@ public class MActivity extends Activity {
 			}
 		});
 
-		//检测网络状态
+		// 检测网络状态
 		CheckNetStatus();
 
 	}
 
 	private void CheckNetStatus() {
-		
+
 		NetState receiver = new NetState();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -119,7 +150,7 @@ public class MActivity extends Activity {
 		course.setId(-1);
 		course.setCid(-123);// 定值
 		course.setPicurl("picurl");
-		course.setName("添加");
+		course.setName("+");
 		course.setState(1);
 
 		Boolean flag = true;
@@ -155,6 +186,26 @@ public class MActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
+
+	/*
+	 * @Override protected void onResume() { Log.i("onresume",
+	 * "chenggong-----"); adapter.notifyDataSetChanged(); super.onResume(); }
+	 * 
+	 * @Override protected void onStart() { Log.i("onStart", "chenggong-----");
+	 * super.onStart(); }
+	 * 
+	 * @Override protected void onPause() { Log.i("onPause", "chenggong-----");
+	 * super.onPause(); }
+	 * 
+	 * @Override protected void onStop() { Log.i("onStop", "chenggong-----");
+	 * super.onStop(); }
+	 * 
+	 * @Override protected void onDestroy() { Log.i("onDestroy",
+	 * "chenggong-----"); super.onDestroy(); }
+	 * 
+	 * @Override protected void onRestart() { Log.i("onRestart",
+	 * "chenggong-----"); super.onRestart(); }
+	 */
 
 	private long exitTime = 0;
 
