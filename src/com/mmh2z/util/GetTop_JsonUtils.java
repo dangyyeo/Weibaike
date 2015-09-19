@@ -11,6 +11,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.mmh2z.object.TopCourse;
 
 public class GetTop_JsonUtils {
@@ -30,7 +32,7 @@ public class GetTop_JsonUtils {
 			while ((line = reader.readLine()) != null) {
 				result.append(line);
 			}
-			// Log.i("Test", result.toString());
+			Log.i("Test", result.toString());
 			if (result.toString().isEmpty()) {
 				return null;
 			} else {
@@ -53,19 +55,24 @@ public class GetTop_JsonUtils {
 			JSONObject object = new JSONObject(jsonData);
 			// System.out.println(object.length());
 
-			JSONArray subcateArray = object.getJSONArray("cate");
+			int flag = object.getInt("flag");
 
-			for (int i = 0; i < subcateArray.length(); i++) {
-				JSONObject json = subcateArray.getJSONObject(i);
+			if (flag != 1) {
 
-				int cid = json.getInt("cid");
-				int pid = json.getInt("pid");
-				String name = json.getString("name");
+				JSONArray subcateArray = object.getJSONArray("cate");
 
-				listItems.add(new TopCourse(cid, pid, name));
+				for (int i = 0; i < subcateArray.length(); i++) {
+					JSONObject json = subcateArray.getJSONObject(i);
+
+					int cid = json.getInt("cid");
+					int pid = json.getInt("pid");
+					String name = json.getString("name");
+
+					listItems.add(new TopCourse(cid, pid, name));
+				}
+
+				return listItems;
 			}
-
-			return listItems;
 
 		} catch (Exception e) {
 			e.printStackTrace();

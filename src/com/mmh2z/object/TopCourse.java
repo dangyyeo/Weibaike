@@ -1,7 +1,13 @@
 package com.mmh2z.object;
 
-public class TopCourse {
+import java.io.Serializable;
 
+public class TopCourse implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int cid;
 	private int pid;
 	private String name;
@@ -36,4 +42,14 @@ public class TopCourse {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	/*
+	 * public int describeContents() { // TODO Auto-generated method stub return
+	 * 0; }
+	 * 
+	 * public void writeToParcel(Parcel dest, int flags) { dest.writeInt(cid);
+	 * dest.writeInt(pid); dest.writeString(name);
+	 * 
+	 * }
+	 */
 }

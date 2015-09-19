@@ -1,372 +1,261 @@
 package com.mmh2z.activity;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
+import android.os.Parcelable;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.GridView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.mmh2z.adapter.CourseAdapter;
-import com.mmh2z.adapter.TopCourseAda;
 import com.mmh2z.object.Course;
 import com.mmh2z.object.TopCourse;
-import com.mmh2z.util.GetJsonUtils;
 import com.mmh2z.util.GetTop_JsonUtils;
 import com.mmh2z.util.HttpUtils;
+import com.mmh2z.util.NetState;
 import com.mmh2z.util.PullCourseService;
 
 public class MainActivity extends Activity {
 
 	private GridView gridview;
-	private ListView mlistview;
-	private TextView tvall;
+	private List<Course> lists;
+	private List<TopCourse> course_list;
+	private CourseAdapter adapter;
+	private boolean isShowDelete = false;
 
 	private String devbaseURL = "http://mhbb.mhedu.sh.cn:8080/hdwiki/index.php";
-	// private String devbaseURL = "http://192.168.1.106/hdwiki/index.php";
-	// private String devbaseURL = "http://10.106.3.106/hdwiki/index.php";
-	private List<Course> courselist;
-	private List<TopCourse> toplist;
-
-	private CourseAdapter adapter;
-	private TopCourseAda topadapter;
-	private AlertDialog dialog = null;
-	Boolean flag = false;
-
-	private DrawerLayout drawer;
-
-	private ActionBar bar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_layout);
-		Log.i("--Main---onCreate", "chenggong-----");
-		bar = getActionBar();
-		bar.setDisplayHomeAsUpEnabled(true);
+		setContentView(R.layout.grid_view);
 
-		tvall = (TextView) findViewById(R.id.tv_all);
-
+		Log.i("onCreate", "chenggong-----");
 		gridview = (GridView) findViewById(R.id.gridView);
 
-		// 初始化侧滑分类列表
-		mlistview = (ListView) findViewById(R.id.lv_list);
-		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		lists = new ArrayList<Course>();
+		course_list = new ArrayList<TopCourse>();
+		// getCourseLists();
 
-		toplist = new ArrayList<TopCourse>();
-		initTopList();
-		topadapter = new TopCourseAda(this, toplist);
-		mlistview.setAdapter(topadapter);
+		new MygetCourseAsyncTask().execute();
 
-		// 获取已发布的Json数据，并处理之，存到courseList中
-		courselist = new ArrayList<Course>();
+		initEvent();
 
-		getCourseList();
+		// 检测网络状态
+		CheckNetStatus();
 
-		adapter = new CourseAdapter(courselist, this);
+	}
 
-		gridview.setAdapter(adapter);
-
-		if (courselist == null)
-			Toast.makeText(getApplicationContext(), "无发布课程。", 0).show();
-
+	private void initEvent() {
+		// 设置点击事件监听器
 		gridview.setOnItemClickListener(new OnItemClickListener() {
-
-			public void onItemClick(AdapterView<?> parent, View view,
-					final int position, long id) {
-
-				final Course itemcourse = courselist.get(position);
-				String name = itemcourse.getName();
-				dialog = new AlertDialog.Builder(MainActivity.this)
-						.setTitle(name)
-						.setMessage("是否添加该课程？")
-						.setPositiveButton("添加",
-								new DialogInterface.OnClickListener() {
-
-									public void onClick(DialogInterface dialog,
-											int which) {
-
-										saveCourseInfo(itemcourse);// 加载该课程
-
-										courselist.remove(position);// 从已发布课程中移除
-
-										adapter.notifyDataSetChanged();//
-
-										Toast.makeText(getApplicationContext(),
-												"该课程已添加。", 0).show();
-
-										flag = true;
-									}
-								}).setNegativeButton("取消", null).show();
-
-			}
-		});
-
-		tvall.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-
-				// 清空courselist列表
-				List<Course> newlist = new ArrayList<Course>();
-				if (courselist != null)
-					for (Course list : courselist) {
-						newlist.add(list);
-					}
-				courselist.removeAll(newlist);
-
-				// 获得courselist列表
-				getCourseList();
-				adapter.notifyDataSetChanged();
-
-				drawer.closeDrawer(Gravity.LEFT);
-				bar.setTitle("已发布课程");
-			}
-		});
-
-		mlistview.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
-				// 清空courselist列表
-				List<Course> newlist = new ArrayList<Course>();
-				if (courselist != null)
-					for (Course list : courselist) {
-						newlist.add(list);
+				Course itemCOur = lists.get(position);
+				//
+				int cid = itemCOur.getCid();
+
+				if (cid == -123) {
+
+					boolean flag = true;
+					ConnectivityManager manager = (ConnectivityManager) MainActivity.this
+							.getSystemService(Context.CONNECTIVITY_SERVICE);
+					NetworkInfo gprs = manager
+							.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+					NetworkInfo wifi = manager
+							.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+					if (gprs != null) {
+						if (!gprs.isConnected() && !wifi.isConnected()) {
+							flag = false;
+						}
+					} else if (wifi != null) {
+						if (!wifi.isConnected()) {
+							flag = false;
+						}
 					}
-				courselist.removeAll(newlist);
 
-				// 获得courselist列表
-				getCourseList();
+					if (!flag) {
+						Toast.makeText(MainActivity.this, "网络连接失败，请重新连接..",
+								Toast.LENGTH_LONG).show();
+					} else {
+						// 添加课程
+						Intent intent = new Intent(MainActivity.this,
+								AddActivity.class);
+						intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+						startActivity(intent);
+						MainActivity.this.finish();
+						overridePendingTransition(android.R.anim.fade_in,
+								android.R.anim.fade_out);
+					}
+				} else {
+					course_list.clear();
 
-				// 获得选中分类cid
-				TopCourse topItem = toplist.get(position);
-				int cid = topItem.getCid();
-				String name = topItem.getName();
-				UpdateCourseLists(cid);
+					String name = itemCOur.getName();
+					// 用Bundle携带数据
+					Bundle bundle = new Bundle();
+					bundle.putInt("cid", cid);
+					bundle.putString("title", name);
 
-				drawer.closeDrawer(Gravity.LEFT);
+					MyShowThread myThread = new MyShowThread(cid);
+					myThread.start();
+					try {
+						myThread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 
-				bar.setTitle(name);
-			}
-		});
-	}
+					if (course_list.size() == 0) {
+						Intent intent = new Intent(MainActivity.this,
+								ShowActivity.class);
 
-	// 更新选中分类的发布课程
-	protected void UpdateCourseLists(int cid) {
-		List<Course> newlist = new ArrayList<Course>();
+						intent.putExtras(bundle);
+						startActivity(intent);
+					} else {
+						// 浏览信息
+						Intent intent = new Intent(MainActivity.this,
+								CateShowActivity.class);
+						bundle.putSerializable("course",
+								(Serializable) course_list);
+						intent.putExtras(bundle);
 
-		if (courselist != null)
-			for (Course list : courselist) {
-				int pid = list.getPid();
-				if (cid != pid)
-					newlist.add(list);
-			}
-		courselist.removeAll(newlist);
-
-		adapter.notifyDataSetChanged();//
-	}
-
-	private void initTopList() {
-
-		Thread th = new Thread(new Runnable() {
-
-			public void run() {
-
-				List<TopCourse> list = GetTop_JsonUtils.getTop_JsonData(
-						devbaseURL + "?app-get_topcourse_list", "GET");
-
-				if (list != null) {
-					toplist = list;
-				}
-			}
-		});
-		th.start();
-		try {
-			th.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	private void getCourseList() {
-
-		Thread thread = new Thread(new Runnable() {
-
-			public void run() {
-
-				try {
-
-					List<Course> list1 = getPreferinfo();// 获取配置文件信息
-
-					List<Course> list2 = GetJsonUtils.getJsonData(devbaseURL
-							+ "?app-get_course_list", "GET");
-
-					dealList(list1, list2); // 处理List<Course>信息
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-
-		});
-		thread.start();
-
-		try {
-			thread.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	// 处理列表List<Course>信息，除去已下载..
-	private void dealList(List<Course> listA, List<Course> listB) {
-
-		for (Course courseB : listB) {
-			Boolean flag = true;
-			int idB = courseB.getId();
-			for (Course courseA : listA) {
-				int idA = courseA.getId();
-				if (idB == idA) {
-					flag = false;
-					break;
-				}
-			}
-			if (flag) {
-				courselist.add(courseB);
-			}
-		}
-	}
-
-	// 写数据到data/data中
-	private void saveCourseInfo(final Course course) {
-
-		Thread threadsa = new Thread(new Runnable() {
-
-			public void run() {
-				try {
-
-					FileInputStream input = HttpUtils
-							.getFileInputStr(MainActivity.this);
-
-					List<Course> list2 = PullCourseService.getXmlCourses(input);// 获取配置文件信息
-					/*
-					 * for (Course co : list2) Log.i("peizhi____---",
-					 * co.getName());
-					 */
-					list2.add(0, course);// 添加课程
-
-					FileOutputStream outstream = HttpUtils
-							.getFileOutputStr(MainActivity.this);
-
-					PullCourseService.saveXmlCourses(list2, outstream);
-
-				} catch (Exception e) {
-					e.printStackTrace();
+						startActivity(intent);
+					}
 				}
 			}
 		});
 
-		threadsa.start();
+		// 设置长按事件监听器
+		gridview.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-		try {
-			threadsa.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
 
-	// 获取配置文件信息
-	public List<Course> getPreferinfo() {
-
-		FileInputStream input = HttpUtils.getFileInputStr(MainActivity.this);
-
-		List<Course> list = PullCourseService.getXmlCourses(input);// 获取配置文件信息
-
-		return list;
-
-	}
-
-	/*@Override
-	protected void onResume() {
-		Log.i("--Main---onresume", "chenggong-----");
-		super.onResume();
-	}
-
-	@Override
-	protected void onStart() {
-		Log.i("--Main---onStart", "chenggong-----");
-		super.onStart();
-	}
-
-	@Override
-	protected void onPause() {
-		Log.i("--Main---onPause", "chenggong-----");
-		super.onPause();
-	}
-
-	@Override
-	protected void onStop() {
-		Log.i("--Main---onStop", "chenggong-----");
-		super.onStop();
-	}
-
-	@Override
-	protected void onDestroy() {
-		Log.i("--Main---onDestroy", "chenggong-----");
-		super.onDestroy();
-	}
-
-	@Override
-	protected void onRestart() {
-		Log.i("--Main---onRestart", "chenggong-----");
-		super.onRestart();
-	}*/
-
-	// 后退事件
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-		if (keyCode == KeyEvent.KEYCODE_BACK
-				&& event.getAction() == KeyEvent.ACTION_DOWN) {
-
-			if (!flag) {
-				if (dialog != null && dialog.isShowing())
-					dialog.cancel();
+				if (isShowDelete) {
+					isShowDelete = false;
+				} else {
+					isShowDelete = true;
+				}
+				adapter.setIsShowDelete(isShowDelete);
+				return true;
 			}
-			Intent intent = new Intent(MainActivity.this, MActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			startActivity(intent);
-			MainActivity.this.finish();
-			overridePendingTransition(android.R.anim.fade_in,
-					android.R.anim.fade_out);
-			return true;
+		});
+	}
+
+	private void CheckNetStatus() {
+
+		NetState receiver = new NetState();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+		this.registerReceiver(receiver, filter);
+		receiver.onReceive(this, null);
+	}
+
+	// 增加"+"号 选项
+	private void addPlusOption() {
+		Course course = new Course();
+
+		course.setId(-1);
+		course.setCid(-123);// 定值
+		course.setPicurl("picurl");
+		course.setName("");
+		course.setState(1);
+
+		Boolean flag = true;
+		for (Course list : lists) {
+			int cid = list.getCid();
+			if (cid == -123) {
+				flag = false;
+				break;
+			}
 		}
-		return super.onKeyDown(keyCode, event);
+		if (flag)
+			lists.add(course);
+	}
+
+	class MygetCourseAsyncTask extends AsyncTask<Void, Void, List<Course>> {
+
+		@Override
+		protected List<Course> doInBackground(Void... params) {
+			FileInputStream input = HttpUtils
+					.getFileInputStr(MainActivity.this); // 获取配置文件
+
+			lists = PullCourseService.getXmlCourses(input);
+			return lists;
+		}
+
+		@Override
+		protected void onPostExecute(List<Course> result) {
+			super.onPostExecute(result);
+
+			lists = result;
+
+			// 增加"+"选项
+			addPlusOption();
+
+			adapter = new CourseAdapter(result, MainActivity.this);
+
+			gridview.setAdapter(adapter);
+		}
+
+	}
+
+	/*
+	 * class MyShowCourseAsyncTask extends AsyncTask<Integer, Void,
+	 * List<TopCourse>> {
+	 * 
+	 * @Override protected List<TopCourse> doInBackground(Integer... params) {
+	 * List<TopCourse> list = GetTop_JsonUtils.getTop_JsonData(devbaseURL +
+	 * "?app-get_sub_cate-" + params[0], "GET");
+	 * 
+	 * return list; }
+	 * 
+	 * @Override protected void onPostExecute(List<TopCourse> result) {
+	 * super.onPostExecute(result); if (result != null) {
+	 * course_list.addAll(result); } } }
+	 */
+
+	class MyShowThread extends Thread {
+		private int cid;
+
+		public MyShowThread(int cid) {
+			this.cid = cid;
+		}
+
+		@Override
+		public void run() {
+			List<TopCourse> list = GetTop_JsonUtils.getTop_JsonData(devbaseURL
+					+ "?app-get_sub_cate-" + cid, "GET");
+			if (list != null) {
+				course_list.clear();
+				course_list.addAll(list);
+			}
+		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.show_menu, menu);
 		return true;
 	}
 
@@ -374,25 +263,33 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		switch (id) {
-
-		case R.id.action_settings:
-			if (drawer.isDrawerOpen(Gravity.LEFT))
-				drawer.closeDrawer(Gravity.LEFT);
-			else
-				drawer.openDrawer(Gravity.LEFT);
-			return true;
-
-		case android.R.id.home:
-			Intent intent = new Intent(MainActivity.this, MActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			startActivity(intent);
-			MainActivity.this.finish();
-			overridePendingTransition(android.R.anim.fade_in,
-					android.R.anim.fade_out);
+		case R.id.ref:
+			new MygetCourseAsyncTask().execute();
 			return true;
 
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
+	private long exitTime = 0;
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		if (keyCode == KeyEvent.KEYCODE_BACK
+				&& event.getAction() == KeyEvent.ACTION_DOWN) {
+			if ((System.currentTimeMillis() - exitTime) > 2000) {
+				Toast.makeText(getApplicationContext(), "再按一次退出程序",
+						Toast.LENGTH_SHORT).show();
+				exitTime = System.currentTimeMillis();
+			} else {
+				finish();
+				System.exit(0);
+			}
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 }

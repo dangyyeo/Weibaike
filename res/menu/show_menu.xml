@@ -2,7 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item android:id="@+id/ref"
-        android:icon="@drawable/ic_popup"
+        android:icon="@drawable/refresh"
         android:showAsAction="always"
         android:title="刷新"/>
+    
 </menu>

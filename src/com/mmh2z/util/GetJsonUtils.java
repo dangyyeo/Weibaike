@@ -48,7 +48,7 @@ public class GetJsonUtils {
 	private static List<Course> JsonParse(String jsonData) {
 		List<Course> listItems = new ArrayList<Course>();
 
-//		Log.i("JsonDataHandler",jsonData);
+		Log.i("JsonDataHandler",jsonData);
 		
 		try {
 			// 处理数据

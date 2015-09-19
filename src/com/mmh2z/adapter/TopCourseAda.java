@@ -6,6 +6,7 @@ import com.mmh2z.activity.R;
 import com.mmh2z.object.TopCourse;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ public class TopCourseAda extends BaseAdapter {
 
 	private Context context;
 	private List<TopCourse> lists;
+	private int selectposition=-1;
 	
 	
 	public TopCourseAda(Context context, List<TopCourse> lists) {
@@ -44,7 +46,17 @@ public class TopCourseAda extends BaseAdapter {
 		}
 		TextView textview=(TextView) convertView.findViewById(R.id.Top_name);
 		textview.setText(lists.get(position).getName());
+		
+		if(selectposition==position){
+			textview.setTextColor(Color.BLUE);
+		}else{
+			textview.setTextColor(Color.BLACK);
+		}
 		return convertView;
+	}
+	
+	public void setSelectposition(int position) {
+		this.selectposition = position;
 	}
 
 }

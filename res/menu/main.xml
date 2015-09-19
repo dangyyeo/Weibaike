@@ -1,17 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.mh2z.activity.MainActivity" >
+    tools:context="com.m2h.activity.MainActivity" >
 
-    <!-- <item
-        android:id="@+id/id_refresh"
-        android:showAsAction="always"
-        android:icon="@drawable/ic_popup"
-        android:title="刷新"/> -->
     <item
         android:id="@+id/action_settings"
-        android:icon="@drawable/showright_selector"
+        android:icon="@drawable/refresh"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:title="分类"/>
+        android:title="@string/action_settings"/>
 
 </menu>

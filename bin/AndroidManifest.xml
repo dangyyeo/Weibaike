@@ -42,14 +42,14 @@
         </activity> -->
         
         <activity
-            android:name=".MActivity"
+            android:name=".MainActivity"
             android:label="@string/M_lable"
             android:screenOrientation="portrait" 
             android:theme="@style/Theme.MainLoad">
         </activity>
         
         <activity
-            android:name=".MainActivity"
+            android:name=".AddActivity"
             android:label="@string/Main_lable"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MainLoad" >
@@ -57,6 +57,10 @@
         <activity
             android:name=".ShowActivity"
             android:hardwareAccelerated="true"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".CateShowActivity"
             android:screenOrientation="portrait" >
         </activity>
     </application>
