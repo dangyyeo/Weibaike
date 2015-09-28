@@ -24,6 +24,7 @@
                 android:layout_width="105dp"
                 android:layout_height="125dp"
                 android:gravity="center"
+                android:scaleType="fitXY"
                 android:src="@drawable/picture" />
 
             <TextView
@@ -33,7 +34,7 @@
                 android:layout_gravity="center"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:paddingBottom="2dp"
+                android:padding="1dp"
                 android:singleLine="true"
                 android:text="@string/action_settings"
                 android:textColor="#ffffff" />

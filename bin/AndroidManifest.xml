@@ -29,7 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- <activity
+        <!--
+        <activity
             android:name="com.mmh2z.activity.MActivity"
             android:label="@string/M_lable"
             android:screenOrientation="portrait"
@@ -39,17 +40,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> -->
-        
+        </activity>
+        -->
+
         <activity
             android:name=".MainActivity"
             android:label="@string/M_lable"
-            android:screenOrientation="portrait" 
-            android:theme="@style/Theme.MainLoad">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MainLoad" >
         </activity>
-        
         <activity
             android:name=".AddActivity"
+            android:icon="@drawable/logo_2"
             android:label="@string/Main_lable"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MainLoad" >
@@ -57,10 +59,12 @@
         <activity
             android:name=".ShowActivity"
             android:hardwareAccelerated="true"
+            android:icon="@drawable/logo_2"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".CateShowActivity"
+            android:icon="@drawable/logo_2"
             android:screenOrientation="portrait" >
         </activity>
     </application>

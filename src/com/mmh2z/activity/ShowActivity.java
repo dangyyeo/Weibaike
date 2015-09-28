@@ -77,7 +77,7 @@ public class ShowActivity extends Activity {
 
 		WebSettings ws = webview.getSettings();
 		ws.setJavaScriptEnabled(true);
-		ws.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+		ws.setCacheMode(WebSettings.LOAD_DEFAULT);
 
 		ws.setPluginState(PluginState.ON);
 		ws.setAllowFileAccess(true);

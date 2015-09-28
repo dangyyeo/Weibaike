@@ -4,23 +4,21 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mmh2z.activity.R;
-import com.mmh2z.object.Course;
-import com.mmh2z.object.ViewHolder;
-import com.mmh2z.util.HttpUtils;
-import com.mmh2z.util.ImageLoader;
-import com.mmh2z.util.PullCourseService;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.mmh2z.activity.R;
+import com.mmh2z.object.Course;
+import com.mmh2z.object.ViewHolder;
+import com.mmh2z.util.HttpUtils;
+import com.mmh2z.util.ImageLoader;
+import com.mmh2z.util.PullCourseService;
 
 public class CourseAdapter extends BaseAdapter {
 
@@ -95,11 +93,13 @@ public class CourseAdapter extends BaseAdapter {
 			viewHolder.delete.setVisibility(isShowDelete ? View.VISIBLE
 					: View.GONE);// 设置删除按钮是否显示
 			viewHolder.image.setImageResource(R.drawable.picture);
-		
+			
 			String image_url = courses.get(position).getPicurl();
-			viewHolder.image.setTag(devbaseURL+image_url);
-			mImageLoader.showImageByAsyncTask(viewHolder.image, devbaseURL
-					+ image_url);
+			if (!image_url.equals("")) {
+				viewHolder.image.setTag(devbaseURL + image_url);
+				mImageLoader.showImageByAsyncTask(viewHolder.image, devbaseURL
+						+ image_url);
+			}
 		}
 
 		// 设置删除图标监听器

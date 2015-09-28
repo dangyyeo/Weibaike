@@ -19,6 +19,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -37,21 +39,25 @@ import com.mmh2z.util.PullCourseService;
 public class MainActivity extends Activity {
 
 	private GridView gridview;
+	private ImageView ref_top;
 	private List<Course> lists;
 	private List<TopCourse> course_list;
 	private CourseAdapter adapter;
 	private boolean isShowDelete = false;
+	private boolean flag = false;
 
 	private String devbaseURL = "http://mhbb.mhedu.sh.cn:8080/hdwiki/index.php";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getWindow().requestFeature(Window.FEATURE_NO_TITLE); // 去标题栏
 		setContentView(R.layout.grid_view);
 
 		Log.i("onCreate", "chenggong-----");
 		gridview = (GridView) findViewById(R.id.gridView);
-
+		ref_top = (ImageView) findViewById(R.id.ref_top);
+		
 		lists = new ArrayList<Course>();
 		course_list = new ArrayList<TopCourse>();
 		// getCourseLists();
@@ -76,7 +82,7 @@ public class MainActivity extends Activity {
 				//
 				int cid = itemCOur.getCid();
 
-				if (cid == -123) {
+				if (cid == -123 && !flag) {
 
 					boolean flag = true;
 					ConnectivityManager manager = (ConnectivityManager) MainActivity.this
@@ -108,7 +114,7 @@ public class MainActivity extends Activity {
 						overridePendingTransition(android.R.anim.fade_in,
 								android.R.anim.fade_out);
 					}
-				} else {
+				} else if (!flag) {
 					course_list.clear();
 
 					String name = itemCOur.getName();
@@ -153,11 +159,20 @@ public class MainActivity extends Activity {
 
 				if (isShowDelete) {
 					isShowDelete = false;
+					flag = false;
 				} else {
 					isShowDelete = true;
+					flag = true;
 				}
 				adapter.setIsShowDelete(isShowDelete);
 				return true;
+			}
+		});
+		
+		ref_top.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				new MygetCourseAsyncTask().execute();
 			}
 		});
 	}
@@ -253,7 +268,7 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.show_menu, menu);
 		return true;
@@ -270,7 +285,7 @@ public class MainActivity extends Activity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
+	}*/
 
 	private long exitTime = 0;
 

@@ -46,13 +46,13 @@ public class AddActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.grid_view);
+		setContentView(R.layout.add_grid_view);
 		Log.i("--Main---onCreate", "chenggong-----");
 
 		bar = getActionBar();
 		bar.setDisplayHomeAsUpEnabled(false);
 
-		gridview = (GridView) findViewById(R.id.gridView);
+		gridview = (GridView) findViewById(R.id.add_gridView);
 
 		// 获取已发布的Json数据，并处理之，存到courseList中
 		courselist = new ArrayList<Course>();
@@ -75,6 +75,7 @@ public class AddActivity extends Activity {
 				dialog = new AlertDialog.Builder(AddActivity.this)
 						.setTitle(name)
 						.setMessage("是否添加该课程？")
+						.setIcon(R.drawable.ic_launcher)
 						.setPositiveButton("添加",
 								new DialogInterface.OnClickListener() {
 

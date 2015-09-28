@@ -7,6 +7,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.mmh2z.activity.R;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -131,8 +133,10 @@ public class ImageLoader {
 		@Override
 		protected void onPostExecute(Bitmap result) {
 			super.onPostExecute(result);
-			if (mImageView.getTag().equals(mUrl)) {
+			if (mImageView.getTag().equals(mUrl)&&result!=null) {
 				mImageView.setImageBitmap(result);
+			}else if(result==null){
+				mImageView.setImageResource(R.drawable.error);
 			}
 		}
 	}

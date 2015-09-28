@@ -8,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mmh2z.activity.R;
@@ -25,7 +23,7 @@ public class AddAdapter extends BaseAdapter {
 	private ImageLoader mImageLoader;
 
 	private String devbaseURL = "http://mhbb.mhedu.sh.cn:8080/hdwiki/";
-	
+
 	public AddAdapter() {
 		super();
 		courses = new ArrayList<Course>();
@@ -74,11 +72,13 @@ public class AddAdapter extends BaseAdapter {
 		viewHolder.name.setText(courses.get(position).getName());
 
 		viewHolder.image.setImageResource(R.drawable.picture);
-//		 动态加载图片
-		 String image_url = courses.get(position).getPicurl();
-		 viewHolder.image.setTag(devbaseURL+image_url);
-		 mImageLoader.showImageByAsyncTask(viewHolder.image, devbaseURL+image_url);
-
+		// 动态加载图片
+		String image_url = courses.get(position).getPicurl();
+		if (!image_url.equals("")) {
+			viewHolder.image.setTag(devbaseURL + image_url);
+			mImageLoader.showImageByAsyncTask(viewHolder.image, devbaseURL
+					+ image_url);
+		}
 		return convertView;
 	}
 }

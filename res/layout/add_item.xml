@@ -10,15 +10,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="2dp"
         android:background="@drawable/bg_xml"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:padding="2dp" >
 
         <ImageView
             android:id="@+id/add_image"
             android:layout_width="105dp"
             android:layout_height="125dp"
             android:layout_gravity="center"
+            android:scaleType="fitXY"
             android:src="@drawable/picture" />
 
         <TextView
@@ -28,6 +29,7 @@
             android:layout_gravity="center"
             android:ellipsize="end"
             android:gravity="center"
+            android:padding="1dp"
             android:singleLine="true"
             android:text="@string/action_settings"
             android:textColor="#ffffff" />
